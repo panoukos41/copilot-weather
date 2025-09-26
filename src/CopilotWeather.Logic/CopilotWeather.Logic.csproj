@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Core weather logic and provider abstractions</Description>
+    <AssemblyTitle>CopilotWeather.Logic</AssemblyTitle>
+  </PropertyGroup>
+
+</Project>

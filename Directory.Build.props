@@ -1,0 +1,27 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    
+    <!-- Artifacts directory configuration -->
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
+    <BaseIntermediateOutputPath>$(ArtifactsPath)\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(ArtifactsPath)\bin\$(MSBuildProjectName)\</BaseOutputPath>
+    <PackageOutputPath>$(ArtifactsPath)\package\</PackageOutputPath>
+    <PublishDir>$(ArtifactsPath)\publish\$(MSBuildProjectName)\</PublishDir>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Common package properties -->
+    <Company>Panos Athanasiou</Company>
+    <Product>Copilot Weather</Product>
+    <Copyright>Copyright (c) 2025 Panos Athanasiou</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/panoukos41/copilot-weather</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+</Project>

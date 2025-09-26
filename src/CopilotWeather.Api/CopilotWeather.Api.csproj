@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <Description>Weather API service with multiple provider support</Description>
+    <AssemblyTitle>CopilotWeather.Api</AssemblyTitle>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../CopilotWeather.Logic/CopilotWeather.Logic.csproj" />
+  </ItemGroup>
+
+</Project>
