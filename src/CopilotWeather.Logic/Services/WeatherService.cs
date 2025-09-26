@@ -12,26 +12,40 @@ public class WeatherService : IWeatherService
         _providers = providers;
     }
 
-    public async Task<WeatherData> GetWeatherAsync(WeatherRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result<WeatherData>> GetWeatherAsync(WeatherRequest request, CancellationToken cancellationToken = default)
     {
-        var provider = _providers.FirstOrDefault();
+        var provider = string.IsNullOrEmpty(request.Provider) 
+            ? _providers.FirstOrDefault()
+            : _providers.FirstOrDefault(p => p.Name.Equals(request.Provider, StringComparison.OrdinalIgnoreCase));
+            
         if (provider == null)
-            throw new InvalidOperationException("No weather providers available");
+        {
+            if (string.IsNullOrEmpty(request.Provider))
+            {
+                return Result<WeatherData>.Failure("No weather providers available");
+            }
+            
+            var availableProviders = string.Join(", ", _providers.Select(p => p.Name));
+            return Result<WeatherData>.Failure($"Weather provider '{request.Provider}' not found. Available providers: {availableProviders}");
+        }
 
-        return await provider.GetWeatherAsync(request, cancellationToken);
+        var providerRequest = new ProviderWeatherRequest { Location = request.Location };
+        var weatherData = await provider.GetWeatherAsync(providerRequest, cancellationToken);
+        return Result<WeatherData>.Success(weatherData);
     }
 
-    public async Task<IEnumerable<WeatherData>> GetWeatherFromAllProvidersAsync(WeatherRequest request, CancellationToken cancellationToken = default)
+    public async Task<Dictionary<string, WeatherData>> GetWeatherFromAllProvidersAsync(string location, CancellationToken cancellationToken = default)
     {
-        var tasks = _providers.Select(p => p.GetWeatherAsync(request, cancellationToken));
+        var providerRequest = new ProviderWeatherRequest { Location = location };
+        var tasks = _providers.Select(async p => new { Provider = p, Data = await p.GetWeatherAsync(providerRequest, cancellationToken) });
         var results = await Task.WhenAll(tasks);
-        return results;
+        return results.ToDictionary(r => r.Provider.Name, r => r.Data);
     }
 
-    public async Task<WeatherData> GetAggregatedWeatherAsync(WeatherRequest request, CancellationToken cancellationToken = default)
+    public async Task<WeatherData> GetAggregatedWeatherAsync(string location, CancellationToken cancellationToken = default)
     {
-        var results = await GetWeatherFromAllProvidersAsync(request, cancellationToken);
-        var weatherDataList = results.ToList();
+        var results = await GetWeatherFromAllProvidersAsync(location, cancellationToken);
+        var weatherDataList = results.Values.ToList();
         
         if (weatherDataList.Count == 0)
             throw new InvalidOperationException("No weather data available");
@@ -50,5 +64,10 @@ public class WeatherService : IWeatherService
             Provider = "Aggregated",
             Timestamp = DateTime.UtcNow
         };
+    }
+
+    public IEnumerable<string> GetAvailableProviders()
+    {
+        return _providers.Select(p => p.Name);
     }
 }

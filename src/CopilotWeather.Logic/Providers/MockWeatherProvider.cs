@@ -7,9 +7,9 @@ public class MockWeatherProvider : IWeatherProvider
 {
     private readonly Random _random = new();
     
-    public string Name => "Mock Provider";
+    public string Name => "Mock";
 
-    public async Task<WeatherData> GetWeatherAsync(WeatherRequest request, CancellationToken cancellationToken = default)
+    public async Task<WeatherData> GetWeatherAsync(ProviderWeatherRequest request, CancellationToken cancellationToken = default)
     {
         // Simulate some processing time
         await Task.Delay(100, cancellationToken);

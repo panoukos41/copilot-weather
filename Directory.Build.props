@@ -7,11 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     
     <!-- Artifacts directory configuration -->
+    <UseArtifactsOutput>true</UseArtifactsOutput>
     <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
-    <BaseIntermediateOutputPath>$(ArtifactsPath)\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(ArtifactsPath)\bin\$(MSBuildProjectName)\</BaseOutputPath>
-    <PackageOutputPath>$(ArtifactsPath)\package\</PackageOutputPath>
-    <PublishDir>$(ArtifactsPath)\publish\$(MSBuildProjectName)\</PublishDir>
   </PropertyGroup>
 
   <PropertyGroup>
